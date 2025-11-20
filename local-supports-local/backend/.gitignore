@@ -1,0 +1,35 @@
+# Ignore Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Ignore database
+*.db
+*.sqlite3
+
+# Ignore environment variables
+.env
+
+# Ignore uploads
+uploads/
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Ignore IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore logs
+*.log
