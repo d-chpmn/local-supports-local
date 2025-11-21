@@ -16,7 +16,11 @@ class Config:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
     
     # Database
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///local_supports_local.db')
+    # Fix for Render/Heroku postgres:// URLs (SQLAlchemy requires postgresql://)
+    database_url = os.getenv('DATABASE_URL', 'sqlite:///local_supports_local.db')
+    if database_url and database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    SQLALCHEMY_DATABASE_URI = database_url
     
     # File Upload
     UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
