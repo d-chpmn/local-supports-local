@@ -26,6 +26,7 @@ def create_app(config_name='development'):
     from routes.notifications import notifications_bp
     from routes.grant_applications import grant_applications_bp
     from routes.admin import admin_bp
+    from setup_admin import setup_bp
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(realtors_bp)
@@ -34,6 +35,7 @@ def create_app(config_name='development'):
     app.register_blueprint(notifications_bp)
     app.register_blueprint(grant_applications_bp, url_prefix='/api/grant-applications')
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
+    app.register_blueprint(setup_bp)
     
     # Serve uploaded files
     @app.route('/uploads/<path:filename>')
