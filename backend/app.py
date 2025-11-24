@@ -28,13 +28,29 @@ def create_app(config_name='development'):
     # Handle preflight requests
     @app.before_request
     def handle_preflight():
+        print(f"🔍 Request: {request.method} {request.path}")
+        print(f"🔍 Origin: {request.headers.get('Origin', 'No origin')}")
+        print(f"🔍 Authorization: {request.headers.get('Authorization', 'No auth header')[:50] if request.headers.get('Authorization') else 'No auth header'}")
+        
         if request.method == "OPTIONS":
             response = app.make_default_options_response()
             response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', frontend_url)
             response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
             response.headers['Access-Control-Allow-Credentials'] = 'true'
+            print(f"✅ Preflight response sent")
             return response
+    
+    # Add CORS headers to all responses
+    @app.after_request
+    def after_request(response):
+        origin = request.headers.get('Origin')
+        if origin in [frontend_url, "http://localhost:3000", "https://poetic-bonbon-5e8ac0.netlify.app"]:
+            response.headers['Access-Control-Allow-Origin'] = origin
+            response.headers['Access-Control-Allow-Credentials'] = 'true'
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+            response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        return response
     
     # Register blueprints
     from routes.auth import auth_bp
