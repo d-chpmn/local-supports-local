@@ -26,15 +26,22 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await authAPI.login({ email, password });
+      console.log('🔐 Login response:', response.data);
       const { access_token, refresh_token, realtor } = response.data;
+
+      console.log('🔑 Token:', access_token ? 'exists' : 'missing');
+      console.log('👤 Realtor:', realtor ? 'exists' : 'missing');
 
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
       localStorage.setItem('user_data', JSON.stringify(realtor));
       setUser(realtor);
       
+      console.log('✅ Tokens stored in localStorage');
+      
       return { success: true };
     } catch (error) {
+      console.error('❌ Login error:', error);
       return {
         success: false,
         error: error.response?.data?.error || 'Login failed'
