@@ -35,9 +35,13 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
       localStorage.setItem('user_data', JSON.stringify(realtor));
-      setUser(realtor);
       
+      // Verify storage immediately
+      const storedToken = localStorage.getItem('access_token');
       console.log('✅ Tokens stored in localStorage');
+      console.log('🔍 Verification - Token in storage:', storedToken ? storedToken.substring(0, 50) + '...' : 'NULL');
+      
+      setUser(realtor);
       
       return { success: true };
     } catch (error) {
