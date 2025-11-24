@@ -122,7 +122,7 @@ def get_history():
 @transactions_bp.route('/current-month', methods=['GET'])
 @jwt_required()
 def check_current_month():
-    \"\"\"Check if current month transactions have been submitted\"\"\"
+    """Check if current month transactions have been submitted"""
     try:
         realtor_id = int(get_jwt_identity())
         
@@ -154,7 +154,7 @@ def check_current_month():
 @transactions_bp.route('/pending', methods=['GET'])
 @jwt_required()
 def get_pending():
-    \"\"\"Get pending transaction submissions\"\"\"
+    """Get pending transaction submissions"""
     try:
         realtor_id = int(get_jwt_identity())
         realtor = Realtor.query.get(realtor_id)
