@@ -3,6 +3,12 @@
 // Use environment variable, fallback to localhost for development
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+console.log('🔧 API Configuration:', {
+  API_URL,
+  env: process.env.REACT_APP_API_URL,
+  nodeEnv: process.env.NODE_ENV
+});
+
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
