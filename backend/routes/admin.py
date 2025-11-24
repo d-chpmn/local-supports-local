@@ -166,13 +166,17 @@ def get_admin_stats():
         
         from models import GrantApplication, Transaction, Donation
         
+        # Get total donations and convert to float
+        total_donations_sum = db.session.query(db.func.sum(Donation.amount)).scalar()
+        total_donations = float(total_donations_sum) if total_donations_sum else 0.0
+        
         stats = {
             'pending_realtors': Realtor.query.filter_by(approval_status='pending').count(),
             'approved_realtors': Realtor.query.filter_by(approval_status='approved').count(),
             'pending_applications': GrantApplication.query.filter_by(status='pending').count(),
             'total_applications': GrantApplication.query.count(),
             'total_transactions': Transaction.query.count(),
-            'total_donations': db.session.query(db.func.sum(Donation.amount)).scalar() or 0
+            'total_donations': total_donations
         }
         
         return jsonify(stats), 200

@@ -116,7 +116,7 @@ const AdminDashboard = () => {
           </div>
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="text-gray-500 text-sm mb-1">Total Donations</div>
-            <div className="text-3xl font-bold text-secondary">${(stats.total_donations || 0).toFixed(2)}</div>
+            <div className="text-3xl font-bold text-secondary">${Number(stats.total_donations || 0).toFixed(2)}</div>
           </div>
         </div>
       )}
