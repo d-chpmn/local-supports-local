@@ -15,8 +15,12 @@ def create_app(config_name='development'):
     db.init_app(app)
     jwt.init_app(app)
     
-    # Configure CORS
-    CORS(app, resources={r"/api/*": {"origins": "*", "allow_headers": ["*"], "expose_headers": ["*"], "supports_credentials": True}})
+    # Configure CORS - Allow all origins for demo
+    CORS(app, 
+         resources={r"/*": {"origins": "*"}},
+         supports_credentials=True,
+         allow_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
     
     # Register blueprints
     from routes.auth import auth_bp
