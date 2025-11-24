@@ -66,7 +66,7 @@ def register():
             notification = Notification(
                 realtor_id=admin.id,
                 type='new_realtor_registration',
-                title='New Realtor Registration',
+                subject='New Realtor Registration',
                 message=f'New realtor registration: {realtor.first_name} {realtor.last_name} ({realtor.email}) - requires approval.',
                 is_read=False
             )

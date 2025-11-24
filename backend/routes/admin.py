@@ -54,7 +54,7 @@ def approve_realtor(realtor_id):
         notification = Notification(
             realtor_id=realtor.id,
             type='account_approved',
-            title='Account Approved',
+            subject='Account Approved',
             message='Congratulations! Your realtor account has been approved. You can now access the full dashboard.',
             is_read=False
         )
@@ -103,7 +103,7 @@ def deny_realtor(realtor_id):
         notification = Notification(
             realtor_id=realtor.id,
             type='account_denied',
-            title='Account Application Denied',
+            subject='Account Application Denied',
             message=f'Your realtor account application has been denied. {reason}',
             is_read=False
         )

@@ -93,7 +93,7 @@ def submit_application():
             notification = Notification(
                 realtor_id=admin.id,
                 type='grant_application',
-                title='New Grant Application Received',
+                subject='New Grant Application Received',
                 message=f'A new grant application has been submitted by {application.applicant_first_name} {application.applicant_last_name}.',
                 is_read=False
             )
