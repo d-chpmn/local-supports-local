@@ -17,6 +17,7 @@ import ApplicationSubmitted from './pages/ApplicationSubmitted';
 import GrantApplications from './pages/GrantApplications';
 import GrantApplicationDetail from './pages/GrantApplicationDetail';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminRealtors from './pages/AdminRealtors';
 
 // Components
 import Navbar from './components/Navbar';
@@ -62,7 +63,7 @@ function AppRoutes() {
       <Route path="/grant-applications" element={<PrivateRoute><GrantApplications /></PrivateRoute>} />
       <Route path="/grant-applications/:id" element={<PrivateRoute><GrantApplicationDetail /></PrivateRoute>} />
       <Route path="/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
-      <Route path="/admin/realtors" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
+      <Route path="/admin/realtors" element={<PrivateRoute><AdminRealtors /></PrivateRoute>} />
 
       {/* Catch all */}
       <Route path="*" element={<Navigate to="/" replace />} />
