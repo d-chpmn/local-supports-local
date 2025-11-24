@@ -1,6 +1,9 @@
 ﻿import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// Use runtime config if available, fallback to environment variable, then localhost
+const API_URL = (window.RUNTIME_CONFIG && window.RUNTIME_CONFIG.API_URL) 
+  || process.env.REACT_APP_API_URL 
+  || 'http://localhost:5000';
 
 // Create axios instance
 const api = axios.create({
