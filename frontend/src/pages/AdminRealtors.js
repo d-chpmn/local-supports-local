@@ -57,6 +57,18 @@ const AdminRealtors = () => {
     }
   };
 
+  const deleteRealtor = async (realtorId) => {
+    if (!window.confirm('Are you sure you want to DELETE this realtor? This will permanently remove all their data including transactions and donations. This action cannot be undone.')) return;
+    
+    try {
+      await api.delete(`/api/admin/realtors/${realtorId}/delete`);
+      await fetchRealtors();
+      alert('Realtor deleted successfully');
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete realtor');
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -237,23 +249,49 @@ const AdminRealtors = () => {
                           >
                             Deny
                           </button>
+                          {!realtor.is_admin && (
+                            <button
+                              onClick={() => deleteRealtor(realtor.id)}
+                              className="text-gray-600 hover:text-gray-900"
+                            >
+                              Delete
+                            </button>
+                          )}
                         </div>
                       )}
                       {realtor.approval_status === 'denied' && (
-                        <button
-                          onClick={() => approveRealtor(realtor.id)}
-                          className="text-green-600 hover:text-green-900"
-                        >
-                          Approve
-                        </button>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => approveRealtor(realtor.id)}
+                            className="text-green-600 hover:text-green-900"
+                          >
+                            Approve
+                          </button>
+                          {!realtor.is_admin && (
+                            <button
+                              onClick={() => deleteRealtor(realtor.id)}
+                              className="text-gray-600 hover:text-gray-900"
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
                       )}
                       {realtor.approval_status === 'approved' && !realtor.is_admin && (
-                        <button
-                          onClick={() => denyRealtor(realtor.id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          Revoke
-                        </button>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => denyRealtor(realtor.id)}
+                            className="text-red-600 hover:text-red-900"
+                          >
+                            Revoke
+                          </button>
+                          <button
+                            onClick={() => deleteRealtor(realtor.id)}
+                            className="text-gray-600 hover:text-gray-900"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>

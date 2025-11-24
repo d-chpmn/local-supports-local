@@ -179,3 +179,42 @@ def get_admin_stats():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@admin_bp.route('/realtors/<int:realtor_id>/delete', methods=['DELETE'])
+@jwt_required()
+def delete_realtor(realtor_id):
+    """Delete a realtor (admin only)"""
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin = Realtor.query.get(current_user_id)
+        
+        if not admin or not admin.is_admin:
+            return jsonify({'error': 'Admin access required'}), 403
+        
+        realtor = Realtor.query.get(realtor_id)
+        if not realtor:
+            return jsonify({'error': 'Realtor not found'}), 404
+        
+        # Prevent deleting admin accounts
+        if realtor.is_admin:
+            return jsonify({'error': 'Cannot delete admin accounts'}), 403
+        
+        # Delete associated records
+        from models.transaction import Transaction
+        from models.donation import Donation
+        from models.notification import Notification
+        
+        Transaction.query.filter_by(realtor_id=realtor_id).delete()
+        Donation.query.filter_by(realtor_id=realtor_id).delete()
+        Notification.query.filter_by(realtor_id=realtor_id).delete()
+        
+        # Delete the realtor
+        db.session.delete(realtor)
+        db.session.commit()
+        
+        return jsonify({'message': 'Realtor deleted successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
