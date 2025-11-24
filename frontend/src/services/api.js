@@ -1,11 +1,11 @@
 ﻿import axios from 'axios';
 
-// Hardcoded for Render deployment - temporary fix
-const API_URL = 'https://local-supports-local-backend.onrender.com';
+// Use environment variable for API URL
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 console.log('🔧 API Configuration:', {
   API_URL,
-  hardcoded: true,
+  env: process.env.REACT_APP_API_URL,
   nodeEnv: process.env.NODE_ENV
 });
 
