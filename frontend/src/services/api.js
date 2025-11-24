@@ -1,7 +1,12 @@
 ﻿import axios from 'axios';
 
 // Use environment variable for API URL
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+let API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+// Force HTTPS in production
+if (process.env.NODE_ENV === 'production' && API_URL.startsWith('http://')) {
+  API_URL = API_URL.replace('http://', 'https://');
+}
 
 console.log('🔧 API Configuration:', {
   API_URL,
