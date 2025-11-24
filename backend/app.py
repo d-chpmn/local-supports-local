@@ -18,7 +18,7 @@ def create_app(config_name='development'):
     # Configure CORS - Use specific origin to support credentials
     frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
     CORS(app, 
-         origins=[frontend_url, "https://*.vercel.app"],
+         origins=[frontend_url, "https://local-supports-local-q306adbfw-derek-chapmans-projects.vercel.app"],
          supports_credentials=True,
          allow_headers=["Content-Type", "Authorization"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
