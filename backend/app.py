@@ -15,11 +15,11 @@ def create_app(config_name='development'):
     db.init_app(app)
     jwt.init_app(app)
     
-    # Configure CORS - Simplified for Render deployment
+    # Configure CORS - Netlify frontend and localhost for development
     frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
     CORS(app, 
          resources={r"/*": {
-             "origins": [frontend_url, "http://localhost:3000"],
+             "origins": [frontend_url, "http://localhost:3000", "https://poetic-bonbon-5e8ac0.netlify.app"],
              "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
              "allow_headers": ["Content-Type", "Authorization"],
              "supports_credentials": True
@@ -30,7 +30,7 @@ def create_app(config_name='development'):
     def handle_preflight():
         if request.method == "OPTIONS":
             response = app.make_default_options_response()
-            response.headers['Access-Control-Allow-Origin'] = frontend_url
+            response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', frontend_url)
             response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
             response.headers['Access-Control-Allow-Credentials'] = 'true'
