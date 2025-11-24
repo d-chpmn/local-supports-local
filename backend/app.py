@@ -15,10 +15,10 @@ def create_app(config_name='development'):
     db.init_app(app)
     jwt.init_app(app)
     
-    # Configure CORS - Use specific origin to support credentials
+    # Configure CORS - Allow Render frontend and localhost for development
     frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
     CORS(app, 
-         origins=[frontend_url, "https://local-supports-local-q306adbfw-derek-chapmans-projects.vercel.app"],
+         origins=[frontend_url, "http://localhost:3000"],
          supports_credentials=True,
          allow_headers=["Content-Type", "Authorization"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
