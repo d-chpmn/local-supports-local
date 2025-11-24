@@ -79,14 +79,17 @@ def create_app(config_name='development'):
     # JWT error handlers
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):
+        print(f"❌ JWT Error: Token expired - {jwt_payload}")
         return jsonify({'error': 'Token has expired'}), 401
     
     @jwt.invalid_token_loader
     def invalid_token_callback(error):
+        print(f"❌ JWT Error: Invalid token - {error}")
         return jsonify({'error': 'Invalid token'}), 401
     
     @jwt.unauthorized_loader
     def unauthorized_callback(error):
+        print(f"❌ JWT Error: Unauthorized - {error}")
         return jsonify({'error': 'Missing authorization token'}), 401
     
     # Create database tables

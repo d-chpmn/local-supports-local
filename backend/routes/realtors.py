@@ -128,6 +128,7 @@ def get_stats():
     """Get realtor donation statistics"""
     try:
         realtor_id = get_jwt_identity()
+        print(f"✅ JWT verified successfully - Realtor ID: {realtor_id}")
         realtor = Realtor.query.get(realtor_id)
         
         if not realtor:
