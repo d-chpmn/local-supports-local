@@ -15,9 +15,10 @@ def create_app(config_name='development'):
     db.init_app(app)
     jwt.init_app(app)
     
-    # Configure CORS - Allow all origins for demo
+    # Configure CORS - Use specific origin to support credentials
+    frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
     CORS(app, 
-         resources={r"/*": {"origins": "*"}},
+         origins=[frontend_url, "https://*.vercel.app"],
          supports_credentials=True,
          allow_headers=["Content-Type", "Authorization"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
