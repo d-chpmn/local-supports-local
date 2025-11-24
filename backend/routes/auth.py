@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from extensions import db
 from models.realtor import Realtor
@@ -78,8 +78,8 @@ def register():
         db.session.commit()
         
         # Create tokens
-        access_token = create_access_token(identity=realtor.id)
-        refresh_token = create_refresh_token(identity=realtor.id)
+        access_token = create_access_token(identity=str(realtor.id))
+        refresh_token = create_refresh_token(identity=str(realtor.id))
         
         return jsonify({
             'message': 'Registration successful',
@@ -111,8 +111,8 @@ def login():
             return jsonify({'error': 'Account is inactive'}), 403
         
         # Create tokens
-        access_token = create_access_token(identity=realtor.id)
-        refresh_token = create_refresh_token(identity=realtor.id)
+        access_token = create_access_token(identity=str(realtor.id))
+        refresh_token = create_refresh_token(identity=str(realtor.id))
         
         return jsonify({
             'message': 'Login successful',
@@ -130,7 +130,7 @@ def refresh():
     """Refresh access token"""
     try:
         identity = get_jwt_identity()
-        access_token = create_access_token(identity=identity)
+        access_token = create_access_token(identity=str(identity))
         return jsonify({'access_token': access_token}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500

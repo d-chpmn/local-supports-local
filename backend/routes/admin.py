@@ -12,7 +12,7 @@ admin_bp = Blueprint('admin', __name__)
 def get_pending_realtors():
     """Get all pending realtor registrations (admin only)"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin = Realtor.query.get(current_user_id)
         
         if not admin or not admin.is_admin:
@@ -32,7 +32,7 @@ def get_pending_realtors():
 def approve_realtor(realtor_id):
     """Approve a realtor registration (admin only)"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin = Realtor.query.get(current_user_id)
         
         if not admin or not admin.is_admin:
@@ -79,7 +79,7 @@ def approve_realtor(realtor_id):
 def deny_realtor(realtor_id):
     """Deny a realtor registration (admin only)"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin = Realtor.query.get(current_user_id)
         
         if not admin or not admin.is_admin:
@@ -125,7 +125,7 @@ def deny_realtor(realtor_id):
 def get_all_realtors():
     """Get all realtors (admin only)"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin = Realtor.query.get(current_user_id)
         
         if not admin or not admin.is_admin:
@@ -158,7 +158,7 @@ def get_all_realtors():
 def get_admin_stats():
     """Get admin dashboard statistics"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         admin = Realtor.query.get(current_user_id)
         
         if not admin or not admin.is_admin:

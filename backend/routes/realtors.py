@@ -19,7 +19,7 @@ def allowed_file(filename, allowed_extensions):
 def get_profile():
     """Get current realtor profile"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         realtor = Realtor.query.get(realtor_id)
         
         if not realtor:
@@ -34,7 +34,7 @@ def get_profile():
 def update_profile():
     """Update realtor profile"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         realtor = Realtor.query.get(realtor_id)
         
         if not realtor:
@@ -81,7 +81,7 @@ def update_profile():
 def upload_headshot():
     """Upload realtor headshot"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         realtor = Realtor.query.get(realtor_id)
         
         if not realtor:
@@ -127,7 +127,7 @@ def upload_headshot():
 def get_stats():
     """Get realtor donation statistics"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         print(f"✅ JWT verified successfully - Realtor ID: {realtor_id}")
         realtor = Realtor.query.get(realtor_id)
         

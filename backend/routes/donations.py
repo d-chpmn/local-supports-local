@@ -15,7 +15,7 @@ donations_bp = Blueprint('donations', __name__, url_prefix='/api/donations')
 def submit_payment():
     """Submit payment for a transaction"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         realtor = Realtor.query.get(realtor_id)
         
         if not realtor:
@@ -89,7 +89,7 @@ def submit_payment():
 def get_stats():
     """Get donation statistics"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         
         # Total donations
         total = db.session.query(func.sum(Donation.amount))\
@@ -142,7 +142,7 @@ def get_stats():
 def get_history():
     """Get donation history"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         
         donations = Donation.query\
             .filter_by(realtor_id=realtor_id)\
@@ -169,7 +169,7 @@ def get_history():
 def get_pending():
     """Get pending donations (transactions not yet paid)"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         
         pending_transactions = Transaction.query\
             .filter_by(realtor_id=realtor_id, status='pending')\
@@ -188,7 +188,7 @@ def get_pending():
 def get_share_image(donation_id):
     """Get social media share image for a donation"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         donation = Donation.query.get(donation_id)
         
         if not donation:

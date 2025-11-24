@@ -123,7 +123,7 @@ def submit_application():
 def get_applications():
     """Get all grant applications (requires authentication)"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         realtor = Realtor.query.get(current_user_id)
         
         if not realtor or not realtor.is_approved:
@@ -162,7 +162,7 @@ def get_applications():
 def get_application(application_id):
     """Get a specific grant application"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         realtor = Realtor.query.get(current_user_id)
         
         if not realtor or not realtor.is_approved:
@@ -183,7 +183,7 @@ def get_application(application_id):
 def update_application_status(application_id):
     """Update application status (admin only)"""
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         realtor = Realtor.query.get(current_user_id)
         
         if not realtor or not realtor.is_admin:

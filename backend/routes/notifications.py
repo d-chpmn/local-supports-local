@@ -11,7 +11,7 @@ notifications_bp = Blueprint('notifications', __name__, url_prefix='/api/notific
 def get_notifications():
     """Get all notifications for realtor"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         
         # Get query parameters
         unread_only = request.args.get('unread_only', 'false').lower() == 'true'
@@ -39,7 +39,7 @@ def get_notifications():
 def mark_as_read(notification_id):
     """Mark notification as read"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         notification = Notification.query.get(notification_id)
         
         if not notification:
@@ -65,7 +65,7 @@ def mark_as_read(notification_id):
 def get_unread_count():
     """Get count of unread notifications"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         
         count = Notification.query\
             .filter_by(realtor_id=realtor_id, is_read=False)\
@@ -83,7 +83,7 @@ def get_unread_count():
 def mark_all_read():
     """Mark all notifications as read"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         
         notifications = Notification.query\
             .filter_by(realtor_id=realtor_id, is_read=False)\

@@ -13,7 +13,7 @@ transactions_bp = Blueprint('transactions', __name__, url_prefix='/api/transacti
 def submit_transaction():
     """Submit monthly closed transactions"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         realtor = Realtor.query.get(realtor_id)
         
         if not realtor:
@@ -105,7 +105,7 @@ def submit_transaction():
 def get_history():
     """Get transaction history"""
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         
         transactions = Transaction.query\
             .filter_by(realtor_id=realtor_id)\
@@ -122,9 +122,9 @@ def get_history():
 @transactions_bp.route('/current-month', methods=['GET'])
 @jwt_required()
 def check_current_month():
-    """Check if current month transactions have been submitted"""
+    \"\"\"Check if current month transactions have been submitted\"\"\"
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         
         # Get previous month
         now = datetime.utcnow()
@@ -154,9 +154,9 @@ def check_current_month():
 @transactions_bp.route('/pending', methods=['GET'])
 @jwt_required()
 def get_pending():
-    """Get pending transaction submissions"""
+    \"\"\"Get pending transaction submissions\"\"\"
     try:
-        realtor_id = get_jwt_identity()
+        realtor_id = int(get_jwt_identity())
         realtor = Realtor.query.get(realtor_id)
         
         if not realtor:
