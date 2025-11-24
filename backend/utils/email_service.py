@@ -22,7 +22,7 @@ def send_email(to_email, subject, html_content, from_name="Local Supports Local"
     """
     try:
         sendgrid_api_key = current_app.config.get('SENDGRID_API_KEY')
-        from_email = current_app.config.get('FROM_EMAIL', 'noreply@localmortgage.com')
+        from_email = current_app.config.get('FROM_EMAIL', 'derekchapman7@gmail.com')
         
         if not sendgrid_api_key:
             current_app.logger.warning("SENDGRID_API_KEY not configured. Email not sent.")
@@ -345,14 +345,11 @@ def send_admin_notification_new_realtor(realtor):
     """
     subject = f"New Realtor Registration - {realtor.first_name} {realtor.last_name}"
     
-    # Get all admin emails
-    from models.realtor import Realtor
-    admins = Realtor.query.filter_by(is_admin=True).all()
-    admin_emails = [admin.email for admin in admins]
+    # Use configured admin email instead of database lookup
+    admin_email = current_app.config.get('ADMIN_EMAIL', 'derekchapman7@gmail.com')
+    admin_emails = [admin_email]
     
-    if not admin_emails:
-        current_app.logger.warning("No admin users found to send notification")
-        return False
+    current_app.logger.info(f"Sending admin notification to {admin_email}")
     
     dashboard_url = f"{current_app.config.get('FRONTEND_URL', 'http://localhost:3000')}/admin"
     
