@@ -184,6 +184,70 @@ def get_admin_stats():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@admin_bp.route('/transactions', methods=['GET'])
+@jwt_required()
+def get_all_transactions():
+    """Get all transactions across all realtors (admin only)"""
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin = Realtor.query.get(current_user_id)
+        
+        if not admin or not admin.is_admin:
+            return jsonify({'error': 'Admin access required'}), 403
+        
+        from models.transaction import Transaction
+        
+        transactions = Transaction.query\
+            .order_by(Transaction.year.desc(), Transaction.month.desc())\
+            .all()
+        
+        # Include realtor info in each transaction
+        transactions_with_realtor = []
+        for t in transactions:
+            t_dict = t.to_dict()
+            realtor = Realtor.query.get(t.realtor_id)
+            if realtor:
+                t_dict['realtor_name'] = f"{realtor.first_name} {realtor.last_name}"
+                t_dict['realtor_email'] = realtor.email
+            transactions_with_realtor.append(t_dict)
+        
+        return jsonify({'transactions': transactions_with_realtor}), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@admin_bp.route('/donations', methods=['GET'])
+@jwt_required()
+def get_all_donations():
+    """Get all donations across all realtors (admin only)"""
+    try:
+        current_user_id = int(get_jwt_identity())
+        admin = Realtor.query.get(current_user_id)
+        
+        if not admin or not admin.is_admin:
+            return jsonify({'error': 'Admin access required'}), 403
+        
+        from models.donation import Donation
+        
+        donations = Donation.query\
+            .order_by(Donation.paid_at.desc())\
+            .all()
+        
+        # Include realtor info in each donation
+        donations_with_realtor = []
+        for d in donations:
+            d_dict = d.to_dict()
+            realtor = Realtor.query.get(d.realtor_id)
+            if realtor:
+                d_dict['realtor_name'] = f"{realtor.first_name} {realtor.last_name}"
+                d_dict['realtor_email'] = realtor.email
+            donations_with_realtor.append(d_dict)
+        
+        return jsonify({'donations': donations_with_realtor}), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @admin_bp.route('/realtors/<int:realtor_id>/delete', methods=['DELETE'])
 @jwt_required()
 def delete_realtor(realtor_id):

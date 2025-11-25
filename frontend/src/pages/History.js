@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { transactionAPI, donationAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import api from '../services/api';
 
 const History = () => {
+  const { user } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [donations, setDonations] = useState([]);
   const [activeTab, setActiveTab] = useState('donations');
@@ -13,10 +16,20 @@ const History = () => {
 
   const fetchHistory = async () => {
     try {
-      const [transactionsRes, donationsRes] = await Promise.all([
-        transactionAPI.getHistory(),
-        donationAPI.getHistory()
-      ]);
+      let transactionsRes, donationsRes;
+      
+      // If admin, fetch all transactions/donations, otherwise fetch for current realtor only
+      if (user?.is_admin) {
+        [transactionsRes, donationsRes] = await Promise.all([
+          api.get('/api/admin/transactions'),
+          api.get('/api/admin/donations')
+        ]);
+      } else {
+        [transactionsRes, donationsRes] = await Promise.all([
+          transactionAPI.getHistory(),
+          donationAPI.getHistory()
+        ]);
+      }
 
       setTransactions(transactionsRes.data.transactions);
       setDonations(donationsRes.data.donations);
@@ -81,6 +94,7 @@ const History = () => {
               <table className="min-w-full">
                 <thead>
                   <tr className="border-b border-gray-200">
+                    {user?.is_admin && <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Realtor</th>}
                     <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Date</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Period</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Amount</th>
@@ -92,6 +106,12 @@ const History = () => {
                 <tbody>
                   {donations.map((donation) => (
                     <tr key={donation.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      {user?.is_admin && (
+                        <td className="py-3 px-4 text-sm">
+                          <div className="font-medium">{donation.realtor_name || 'N/A'}</div>
+                          <div className="text-xs text-gray-500">{donation.realtor_email}</div>
+                        </td>
+                      )}
                       <td className="py-3 px-4 text-sm">
                         {new Date(donation.paid_at).toLocaleDateString()}
                       </td>
@@ -144,6 +164,7 @@ const History = () => {
               <table className="min-w-full">
                 <thead>
                   <tr className="border-b border-gray-200">
+                    {user?.is_admin && <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Realtor</th>}
                     <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Period</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Closed Deals</th>
                     <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">Donation Amount</th>
@@ -154,6 +175,12 @@ const History = () => {
                 <tbody>
                   {transactions.map((transaction) => (
                     <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      {user?.is_admin && (
+                        <td className="py-3 px-4 text-sm">
+                          <div className="font-medium">{transaction.realtor_name || 'N/A'}</div>
+                          <div className="text-xs text-gray-500">{transaction.realtor_email}</div>
+                        </td>
+                      )}
                       <td className="py-3 px-4 text-sm font-medium text-primary">
                         {months[transaction.month - 1]} {transaction.year}
                       </td>
