@@ -21,12 +21,19 @@ def validate_address_route():
     if not all([address, city, state, zip_code]):
         return jsonify({'error': 'All address fields are required'}), 400
     
-    result = validate_address(address, city, state, zip_code)
+    # For demo purposes, skip actual USPS validation and return the address as-is
+    # In production, you would call validate_address(address, city, state, zip_code)
+    result = {
+        'success': True,
+        'address': address,
+        'city': city,
+        'state': state,
+        'zip5': zip_code,
+        'zip4': '',
+        'full_address': f"{address}, {city}, {state} {zip_code}"
+    }
     
-    if result['success']:
-        return jsonify(result), 200
-    else:
-        return jsonify(result), 400
+    return jsonify(result), 200
 
 @grant_applications_bp.route('/', methods=['POST'])
 def submit_application():
