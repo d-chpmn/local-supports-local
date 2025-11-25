@@ -197,7 +197,7 @@ def send_application_confirmation_email(application):
     """
     subject = "Your Grant Application Has Been Received"
     
-    applicant_name = application.applicant_name
+    applicant_name = f"{application.applicant_first_name} {application.applicant_last_name}"
     applicant_email = application.applicant_email
     
     html_content = f"""
@@ -266,7 +266,7 @@ def send_new_application_notification(application, recipients):
         application: GrantApplication object
         recipients: List of email addresses to notify
     """
-    subject = f"New Grant Application Received - {application.applicant_name}"
+    subject = f"New Grant Application Received - {application.applicant_first_name} {application.applicant_last_name}"
     
     application_url = f"{current_app.config.get('FRONTEND_URL', 'http://localhost:3000')}/grant-applications/{application.id}"
     
