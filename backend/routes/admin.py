@@ -203,16 +203,26 @@ def delete_realtor(realtor_id):
         if realtor.is_admin:
             return jsonify({'error': 'Cannot delete admin accounts'}), 403
         
-        # Delete associated records
+        # Delete associated records (order matters due to foreign key constraints)
         from models.transaction import Transaction
         from models.donation import Donation
         from models.notification import Notification
         
+        # Get all transaction IDs for this realtor
+        transactions = Transaction.query.filter_by(realtor_id=realtor_id).all()
+        transaction_ids = [t.id for t in transactions]
+        
+        # First, delete donations that reference these transactions
+        if transaction_ids:
+            Donation.query.filter(Donation.transaction_id.in_(transaction_ids)).delete(synchronize_session=False)
+        
+        # Then delete transactions
         Transaction.query.filter_by(realtor_id=realtor_id).delete()
-        Donation.query.filter_by(realtor_id=realtor_id).delete()
+        
+        # Delete notifications
         Notification.query.filter_by(realtor_id=realtor_id).delete()
         
-        # Delete the realtor
+        # Finally, delete the realtor
         db.session.delete(realtor)
         db.session.commit()
         
