@@ -310,7 +310,7 @@ def send_new_application_notification(application, recipients):
                 
                 <div class="info-box">
                     <strong>Application ID:</strong> {application.id}<br>
-                    <strong>Applicant Name:</strong> {application.applicant_name}<br>
+                    <strong>Applicant Name:</strong> {application.applicant_first_name} {application.applicant_last_name}<br>
                     <strong>Applicant Email:</strong> {application.applicant_email}<br>
                     <strong>Application Type:</strong> {application.application_type.replace('_', ' ').title()}<br>
                     <strong>Date Submitted:</strong> {application.created_at.strftime('%B %d, %Y at %I:%M %p')}<br>
